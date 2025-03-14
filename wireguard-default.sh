@@ -229,7 +229,8 @@ if [[ ! -e /etc/wireguard/wg0.conf ]]; then
 		echo
 		echo "Which IPv4 address should be used?"
 		ip -4 addr | grep inet | grep -vE '127(\.[0-9]{1,3}){3}' | cut -d '/' -f 1 | grep -oE '[0-9]{1,3}(\.[0-9]{1,3}){3}' | nl -s ') '
-		read -p "IPv4 address [1]: " ip_number
+		# read -p "IPv4 address [1]: " ip_number
+		ip_number=1
 		until [[ -z "$ip_number" || "$ip_number" =~ ^[0-9]+$ && "$ip_number" -le "$number_of_ip" ]]; do
 			echo "$ip_number: invalid selection."
 			read -p "IPv4 address [1]: " ip_number
@@ -281,7 +282,7 @@ if [[ ! -e /etc/wireguard/wg0.conf ]]; then
 	[[ -z "$port" ]] && port="51820"
 	echo
 	echo "Enter a name for the first client:"
-	read -p "Name [client]: " unsanitized_client
+	# read -p "Name [client]: " unsanitized_client
 	# Allow a limited length and set of characters to avoid conflicts
 	unsanitized_client="client$((1 + $RANDOM % 10000))"
 	echo client name $unsanitized_client
