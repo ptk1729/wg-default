@@ -284,7 +284,12 @@ if [[ ! -e /etc/wireguard/wg0.conf ]]; then
 	echo "Enter a name for the first client:"
 	# read -p "Name [client]: " unsanitized_client
 	# Allow a limited length and set of characters to avoid conflicts
-	unsanitized_client="client$((1 + $RANDOM % 10000))"
+	if [ -z "$1" ]; then
+		unsanitized_client="client$((1 + RANDOM % 10000))"
+	else
+		unsanitized_client="$1"
+	fi
+	# unsanitized_client="client$((1 + $RANDOM % 10000))"
 	echo client name $unsanitized_client
 	client=$(sed 's/[^0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-]/_/g' <<< "$unsanitized_client" | cut -c-15)
 	[[ -z "$client" ]] && client="client"
@@ -523,7 +528,12 @@ else
 			echo
 			echo "Provide a name for the client:"
 			# read -p "Name: " unsanitized_client
-			unsanitized_client="client$((1 + $RANDOM % 10000))"
+			if [ -z "$1" ]; then
+				unsanitized_client="client$((1 + RANDOM % 10000))"
+			else
+				unsanitized_client="$1"
+			fi
+			# unsanitized_client="client$((1 + $RANDOM % 10000))"
 			# Allow a limited lenght and set of characters to avoid conflicts
 			client=$(sed 's/[^0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-]/_/g' <<< "$unsanitized_client" | cut -c-15)
 			while [[ -z "$client" ]] || grep -q "^# BEGIN_PEER $client$" /etc/wireguard/wg0.conf; do
